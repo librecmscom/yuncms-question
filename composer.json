@@ -18,7 +18,7 @@
     "yiisoft/yii2": "~2.0.6",
     "yiisoft/yii2-jui": "~2.0.0",
     "xutl/yii2-select2-widget": "~1.0",
-    "yuncms/yuncms-coin": "~1.0",
+    "yuncms/yuncms-coin": "~2.0",
     "yuncms/yuncms-tag": "~2.0",
     "yuncms/yuncms-user": "~2.0",
     "yuncms/yuncms-attachment": "~2.0.0",
