@@ -23,7 +23,7 @@
     "yuncms/yuncms-user": "~2.0",
     "yuncms/yuncms-attachment": "~2.0.0",
     "yuncms/yuncms-comment": "~2.0.0",
-    "yuncms/yuncms-summernote-widget": "~1.0"
+    "yuncms/yuncms-summernote-widget": "~2.0"
   },
   "autoload": {
     "psr-4": {
