@@ -39,7 +39,7 @@ use yuncms\user\models\User;
  * @property integer $created_at
  * @property integer $updated_at
  *
- * @property array $tags
+ * @property Tag[] $tags
  */
 class Question extends ActiveRecord
 {
@@ -165,7 +165,7 @@ class Question extends ActiveRecord
 
     /**
      * Answer Relation
-     * @return \yii\db\ActiveQueryInterface
+     * @return \yii\db\ActiveQuery
      */
     public function getAnswers()
     {
