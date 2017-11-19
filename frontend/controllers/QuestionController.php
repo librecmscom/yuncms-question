@@ -20,7 +20,6 @@ use yii\web\Response;
 use yuncms\question\models\Question;
 use yuncms\question\models\QuestionAnswer;
 use yuncms\tag\models\Tag;
-use yuncms\summernote\SummerNoteAction;
 
 /**
  * Class QuestionController
@@ -97,7 +96,7 @@ class QuestionController extends Controller
     /**
      * Tag 下拉加载
      * @param string $query
-     * @return array|Tag[]
+     * @return array
      * @throws InvalidConfigException
      */
     public function actionAutoComplete($query)
@@ -110,8 +109,7 @@ class QuestionController extends Controller
                 return [];
             }
         } else {
-            $query = Tag::find();
-            $rows = $query->select(['name as id', 'name', 'name as text', 'frequency'])
+            $rows = Tag::find()->select(['name as id', 'name', 'name as text', 'frequency'])
                 ->where(['like', 'name', $query])
                 ->orderBy(['frequency' => SORT_DESC])
                 ->limit(20)
