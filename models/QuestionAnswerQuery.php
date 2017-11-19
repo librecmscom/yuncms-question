@@ -12,7 +12,7 @@ class QuestionAnswerQuery extends ActiveQuery
 {
     /**
      * Apply possible answers order to query
-     * @param $order
+     * @param string $order
      * @return string
      */
     public function applyOrder($order)
