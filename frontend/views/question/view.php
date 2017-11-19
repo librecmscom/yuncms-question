@@ -6,8 +6,8 @@ use yii\widgets\ListView;
 use yii\bootstrap\Modal;
 use yii\helpers\HtmlPurifier;
 use yii\bootstrap\ActiveForm;
-use yuncms\question\models\Answer;
 use yuncms\question\models\Question;
+use yuncms\question\models\QuestionAnswer;
 use yuncms\question\frontend\assets\Asset;
 
 /**
@@ -103,7 +103,7 @@ $this->title = Html::encode($model->title);
                     </div>
 
                     <!-- 评论 -->
-                    <?= \yuncms\comment\frontend\widgets\Comment::widget(['source_type' => 'answer', 'source_id' => $bestAnswer->id, 'hide_cancel' => false]) ?>
+                    <?= \yuncms\question\frontend\widgets\Comment::widget(['source_type' => 'answer', 'source_id' => $bestAnswer->id, 'hide_cancel' => false]) ?>
                     <!-- 评论结束 -->
                     <div class="media user-info border-top">
                         <div class="media-left">
@@ -175,7 +175,7 @@ $this->title = Html::encode($model->title);
         </div>
         <?php if ($model->status != Question::STATUS_END): ?>
             <div class="widget-answer-form mt-15">
-                <?php if (!Yii::$app->user->isGuest && ($model->user_id != Yii::$app->user->id && Answer::isAnswered(Yii::$app->user->id, $model->id))): ?>
+                <?php if (!Yii::$app->user->isGuest && ($model->user_id != Yii::$app->user->id && QuestionAnswer::isAnswered(Yii::$app->user->id, $model->id))): ?>
                     <h4>我来回答</h4>
                     <?= \yuncms\question\widgets\Answer::widget(['questionId' => $model->id]); ?>
                 <?php endif; ?>
@@ -299,7 +299,7 @@ if (!Yii::$app->user->isGuest && $model->isAuthor()) {
         </select> 个积分
     </div>
     <div class="form-group">
-        （您目前共有 <span class="text-gold"><?= Yii::$app->user->identity->extend->coins ?></span> 个积分）
+        （您目前共有 <span class="text-gold"><?= Yii::$app->user->identity->extra->coins ?></span> 个积分）
     </div>
     <?php ActiveForm::end() ?>
     <?php
