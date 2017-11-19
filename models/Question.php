@@ -35,6 +35,8 @@ use yuncms\user\models\User;
  * @property integer $answers
  * @property integer $views
  * @property integer $votes
+ * @property integer $followers
+ * @property integer $collections
  * @property integer $status
  * @property integer $created_at
  * @property integer $updated_at
@@ -189,7 +191,36 @@ class Question extends ActiveRecord
      */
     public function getCollections()
     {
-        return $this->hasMany(Collection::className(), ['model_id' => 'id'])->onCondition(['model' => static::className()]);
+        return $this->hasMany(Collection::className(), ['model_id' => 'id'])->onCondition(['model_class' => static::className()]);
+    }
+
+    /**
+     * 是否已经收藏过
+     * @param int $user_id
+     * @return bool
+     */
+    public function isCollected($user_id)
+    {
+        return $this->getCollections()->andWhere(['user_id' => $user_id])->exists();
+    }
+
+    /**
+     * Collection Relation
+     * @return \yii\db\ActiveQueryInterface
+     */
+    public function getAttentions()
+    {
+        return $this->hasMany(QuestionAttention::className(), ['model_id' => 'id'])->onCondition(['model_class' => static::className()]);
+    }
+
+    /**
+     * 是否已关注
+     * @param int $user_id
+     * @return mixed
+     */
+    public function isFollowed($user_id)
+    {
+        return $this->getAttentions()->andWhere(['user_id' => $user_id])->exists();
     }
 
     /**

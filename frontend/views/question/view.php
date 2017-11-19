@@ -62,7 +62,7 @@ $this->title = Html::encode($model->title);
                     </ul>
                 </div>
 
-                <?= \yuncms\comment\frontend\widgets\Comment::widget(['source_type' => 'question', 'source_id' => $model->id, 'hide_cancel' => false]) ?>
+                <?= \yuncms\comment\frontend\widgets\Comment::widget(['model_class' => 'question', 'model_id' => $model->id, 'hide_cancel' => false]) ?>
 
                 <!-- 分享
                 <div class="mb-10">
@@ -103,7 +103,7 @@ $this->title = Html::encode($model->title);
                     </div>
 
                     <!-- 评论 -->
-                    <?= \yuncms\question\frontend\widgets\Comment::widget(['source_type' => 'answer', 'source_id' => $bestAnswer->id, 'hide_cancel' => false]) ?>
+                    <?= \yuncms\comment\frontend\widgets\Comment::widget(['model_class' => 'answer', 'model_id' => $bestAnswer->id, 'hide_cancel' => false]) ?>
                     <!-- 评论结束 -->
                     <div class="media user-info border-top">
                         <div class="media-left">
@@ -187,7 +187,7 @@ $this->title = Html::encode($model->title);
             <ul class="widget-action list-unstyled">
                 <!-- 关注部分 -->
                 <li>
-                    <?php if (!Yii::$app->user->isGuest && Yii::$app->user->identity->isFollowed($model, $model->id)): ?>
+                    <?php if (!Yii::$app->user->isGuest && $model->isFollowed(Yii::$app->user->getId())): ?>
                         <button type="button" data-target="follow-button" class="btn btn-success btn-sm active"
                                 data-source_type="question" data-source_id="<?= $model->id ?>" data-show_num="true"
                                 data-toggle="tooltip" data-placement="right" title="" data-original-title="关注后将获得更新提醒">
@@ -204,7 +204,7 @@ $this->title = Html::encode($model->title);
                 </li>
                 <!-- 收藏部分 -->
                 <li>
-                    <?php if (!Yii::$app->user->isGuest && Yii::$app->user->identity->isCollected($model, $model->id)): ?>
+                    <?php if (!Yii::$app->user->isGuest && $model->isCollected(Yii::$app->user->getId())): ?>
                         <button type="button" data-target="collect-button" class="btn btn-default btn-sm active"
                                 data-source_type="question" data-source_id="<?= $model->id ?>" data-show_num="true"
                                 data-toggle="tooltip" data-placement="right" title="" data-original-title="关注后将获得更新提醒">
