@@ -40,6 +40,8 @@ use yuncms\user\models\User;
  * @property integer $updated_at
  *
  * @property array $tags
+ * @property User $user
+ * @property boolean hide
  */
 class Question extends ActiveRecord
 {

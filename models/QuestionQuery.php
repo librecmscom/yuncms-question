@@ -11,6 +11,9 @@ use creocoder\taggable\TaggableQueryBehavior;
 
 /**
  * Class QuestionQuery
+ * @method ActiveQuery anyTagValues($values, $attribute = null)
+ * @method ActiveQuery allTagValues($values, $attribute = null)
+ * @method ActiveQuery relatedByTagValues($values, $attribute = null)
  * @package yuncms\question\models
  */
 class QuestionQuery extends ActiveQuery

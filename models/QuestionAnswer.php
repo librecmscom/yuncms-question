@@ -13,6 +13,7 @@ use yii\behaviors\AttributeBehavior;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
 use yuncms\user\jobs\UpdateExtraCounterJob;
+use yuncms\user\models\User;
 
 /**
  * Answer Model
@@ -29,6 +30,7 @@ use yuncms\user\jobs\UpdateExtraCounterJob;
  * @property integer $updated_at 更新时间
  *
  * @property Question $question
+ * @property User $user
  * @since 1.0
  */
 class QuestionAnswer extends ActiveRecord
@@ -110,7 +112,7 @@ class QuestionAnswer extends ActiveRecord
      */
     public function getUser()
     {
-        return $this->hasOne(Yii::$app->user->identityClass, ['id' => 'user_id']);
+        return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 
     /**
