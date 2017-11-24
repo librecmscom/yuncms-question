@@ -152,7 +152,7 @@ class QuestionAnswer extends ActiveRecord
         if ($insert) {
             /* 问题回答数+1 */
             Yii::$app->queue->push(new UpdateQuestionCounterJob([
-                'user_id' => $this->user_id,
+                'id' => $this->question_id,
                 'field' => 'answers',
                 'counter' => 1
             ]));
@@ -176,7 +176,7 @@ class QuestionAnswer extends ActiveRecord
     public function afterDelete()
     {
         Yii::$app->queue->push(new UpdateQuestionCounterJob([
-            'user_id' => $this->user_id,
+            'id' => $this->question_id,
             'field' => 'answers',
             'counter' => -1
         ]));
