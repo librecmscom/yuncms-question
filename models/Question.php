@@ -30,8 +30,10 @@ use yuncms\user\models\User;
  * @property integer $user_id
  * @property string $title
  * @property string $alias
+ * @property Tag[] $tags
  * @property integer $price
  * @property string $content
+ * @property string $body
  * @property integer $answers
  * @property integer $views
  * @property integer $votes
@@ -40,8 +42,8 @@ use yuncms\user\models\User;
  * @property integer $status
  * @property integer $created_at
  * @property integer $updated_at
+
  *
- * @property Tag[] $tags
  * @property User $user
  * @property boolean hide
  */
@@ -163,8 +165,7 @@ class Question extends ActiveRecord
      */
     public function getTags()
     {
-        return $this->hasMany(Tag::className(), ['id' => 'tag_id'])
-            ->viaTable('{{%question_tag}}', ['question_id' => 'id']);
+        return $this->hasMany(Tag::className(), ['id' => 'tag_id'])->viaTable('{{%question_tag}}', ['question_id' => 'id']);
     }
 
     /**
@@ -191,7 +192,7 @@ class Question extends ActiveRecord
      */
     public function getCollections()
     {
-        return $this->hasMany(Collection::className(), ['model_id' => 'id'])->onCondition(['model_class' => static::className()]);
+        return $this->hasMany(QuestionCollection::className(), ['model_id' => 'id']);
     }
 
     /**
@@ -210,7 +211,7 @@ class Question extends ActiveRecord
      */
     public function getAttentions()
     {
-        return $this->hasMany(QuestionAttention::className(), ['model_id' => 'id'])->onCondition(['model_class' => static::className()]);
+        return $this->hasMany(QuestionAttention::className(), ['model_id' => 'id']);
     }
 
     /**
@@ -258,7 +259,7 @@ class Question extends ActiveRecord
             Yii::$app->queue->push(new UpdateExtraCounterJob([
                 'user_id' => $this->user_id,
                 'field' => 'questions',
-                'counter' => 1
+                'counters' => 1
             ]));
         }
     }
@@ -275,7 +276,7 @@ class Question extends ActiveRecord
         Yii::$app->queue->push(new UpdateExtraCounterJob([
             'user_id' => $this->user_id,
             'field' => 'questions',
-            'counter' => -1
+            'counters' => -1
         ]));
         parent::afterDelete();
     }

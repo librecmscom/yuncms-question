@@ -14,6 +14,7 @@ use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
 use yuncms\user\jobs\UpdateExtraCounterJob;
 use yuncms\user\models\User;
+use yuncms\question\jobs\UpdateQuestionCounterJob;
 
 /**
  * Answer Model
@@ -23,6 +24,7 @@ use yuncms\user\models\User;
  * @property integer $user_id 用户ID
  * @property integer $question_id 问题ID
  * @property string $content 回答内容
+ * @property string $body
  * @property integer $comments 评论数
  * @property integer $supports 赞数
  * @property integer $adopted_at 采纳时间
@@ -31,11 +33,9 @@ use yuncms\user\models\User;
  *
  * @property Question $question
  * @property User $user
- * @since 1.0
  */
 class QuestionAnswer extends ActiveRecord
 {
-
     /**
      * Markdown processed content
      * @var string
@@ -151,12 +151,15 @@ class QuestionAnswer extends ActiveRecord
         parent::afterSave($insert, $changedAttributes);
         if ($insert) {
             /* 问题回答数+1 */
-            $this->question->updateCounters(['answers' => 1]);
-            /* 用户回答数+1 */
+            Yii::$app->queue->push(new UpdateQuestionCounterJob([
+                'user_id' => $this->user_id,
+                'field' => 'answers',
+                'counters' => 1
+            ]));
             Yii::$app->queue->push(new UpdateExtraCounterJob([
                 'user_id' => $this->user_id,
                 'field' => 'answers',
-                'counter' => 1
+                'counters' => 1
             ]));
 
             /*记录动态*/
@@ -172,13 +175,16 @@ class QuestionAnswer extends ActiveRecord
      */
     public function afterDelete()
     {
-        parent::afterDelete();
-        $this->question->updateCounters(['answers' => -1]);
-        /* 用户回答数-1 */
+        Yii::$app->queue->push(new UpdateQuestionCounterJob([
+            'user_id' => $this->user_id,
+            'field' => 'answers',
+            'counters' => -1
+        ]));
         Yii::$app->queue->push(new UpdateExtraCounterJob([
             'user_id' => $this->user_id,
             'field' => 'answers',
-            'counter' => -1
+            'counters' => -1
         ]));
+        parent::afterDelete();
     }
 }

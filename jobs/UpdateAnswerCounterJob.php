@@ -4,29 +4,41 @@
  * @copyright Copyright (c) 2012 TintSoft Technology Co. Ltd.
  * @license http://www.tintsoft.com/license/
  */
-
 namespace yuncms\question\jobs;
 
 use yii\base\BaseObject;
 use yii\queue\Queue;
 use yii\queue\RetryableJobInterface;
-use yuncms\question\models\Question;
+use yuncms\question\models\QuestionAnswer;
 
 /**
- * Class UpdateSupportJob
- * @package yuncms\question\jobs
+ * 异步更新计数器
+ * @package yuncms\article\jobs
  */
-class UpdateSupportJob extends BaseObject implements RetryableJobInterface
+class UpdateAnswerCounterJob extends BaseObject implements RetryableJobInterface
 {
+    /**
+     * @var int
+     */
     public $id;
+
+    /**
+     * @var string 字段名
+     */
+    public $field;
+
+    /**
+     * @var integer
+     */
+    public $counters = 1;
 
     /**
      * @param Queue $queue
      */
     public function execute($queue)
     {
-        if (($model = Question::findOne(['id' => $this->id])) != null) {
-            $model->updateCounters(['supports' => 1]);
+        if (($model = QuestionAnswer::findOne(['id' => $this->id])) != null) {
+            $model->updateCounters([$this->field => $this->counters]);
         }
     }
 

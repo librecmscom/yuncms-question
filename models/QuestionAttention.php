@@ -7,16 +7,16 @@
 namespace yuncms\question\models;
 
 use Yii;
+use yuncms\attention\models\Attention;
 use yuncms\collection\models\CollectionQuery;
 
 /**
- * Class Support
- * @property string $subject
+ * Class QuestionAttention
  * @package yuncms\question\models
  */
-class QuestionAttention extends \yuncms\attention\models\Attention
+class QuestionAttention extends Attention
 {
-    const TYPE = 'sixiang\question\models\Question';
+    const TYPE = 'yuncms\question\models\Question';
 
     /**
      * @return void

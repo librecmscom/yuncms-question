@@ -8,17 +8,18 @@
 namespace yuncms\question\models;
 
 use Yii;
+use yuncms\collection\models\Collection;
 use yuncms\collection\models\CollectionQuery;
-use yuncms\question\jobs\UpdateCollectionJob;
+use yuncms\question\jobs\UpdateAnswerCounterJob;
 
 /**
  * Class Support
  * @property string $subject
  * @package yuncms\article\models
  */
-class QuestionCollection extends \yuncms\collection\models\Collection
+class QuestionCollection extends Collection
 {
-    const TYPE = 'sixiang\question\models\Question';
+    const TYPE = 'yuncms\question\models\Question';
 
     /**
      * @return void
@@ -44,7 +45,16 @@ class QuestionCollection extends \yuncms\collection\models\Collection
     public function beforeSave($insert)
     {
         $this->model_class = self::TYPE;
-        Yii::$app->queue->push(new UpdateCollectionJob(['id' => $this->model_id]));
+        Yii::$app->queue->push(new UpdateAnswerCounterJob(['id' => $this->model_id, 'field' => 'collections', 'counters' => 1]));
         return parent::beforeSave($insert);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function afterDelete()
+    {
+        Yii::$app->queue->push(new UpdateAnswerCounterJob(['id' => $this->model_id, 'field' => 'collections', 'counters' => -1]));
+        parent::afterDelete();
     }
 }

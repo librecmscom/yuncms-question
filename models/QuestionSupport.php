@@ -8,16 +8,17 @@
 namespace yuncms\question\models;
 
 use Yii;
-use yuncms\question\jobs\UpdateSupportJob;
+use yuncms\support\models\Support;
 use yuncms\support\models\SupportQuery;
+use yuncms\question\jobs\UpdateAnswerCounterJob;
 
 /**
  * Class Support
  * @package yuncms\article\models
  */
-class QuestionSupport extends \yuncms\support\models\Support
+class QuestionSupport extends Support
 {
-    const TYPE = 'sixiang\question\models\Question';
+    const TYPE = 'yuncms\question\models\Question';
 
     /**
      * @return void
@@ -43,7 +44,16 @@ class QuestionSupport extends \yuncms\support\models\Support
     public function beforeSave($insert)
     {
         $this->model_class = self::TYPE;
-        Yii::$app->queue->push(new UpdateSupportJob(['id' => $this->model_id]));
+        Yii::$app->queue->push(new UpdateAnswerCounterJob(['id' => $this->model_id, 'field' => 'supports', 'counters' => 1]));
         return parent::beforeSave($insert);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function afterDelete()
+    {
+        Yii::$app->queue->push(new UpdateAnswerCounterJob(['id' => $this->model_id, 'field' => 'supports', 'counters' => -1]));
+        parent::afterDelete();
     }
 }

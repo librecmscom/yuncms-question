@@ -8,16 +8,17 @@
 namespace yuncms\question\models;
 
 use Yii;
+use yuncms\comment\models\Comment;
 use yuncms\comment\models\CommentQuery;
-use yuncms\question\jobs\UpdateCommentJob;
+use yuncms\question\jobs\UpdateAnswerCounterJob;
 
 /**
  * Class Comment
  * @package yuncms\article\models
  */
-class QuestionComment extends \yuncms\comment\models\Comment
+class QuestionComment extends Comment
 {
-    const TYPE = 'sixiang\question\models\Question';
+    const TYPE = 'yuncms\question\models\Question';
 
     /**
      * @return void
@@ -43,7 +44,16 @@ class QuestionComment extends \yuncms\comment\models\Comment
     public function beforeSave($insert)
     {
         $this->model_class = self::TYPE;
-        Yii::$app->queue->push(new UpdateCommentJob(['id' => $this->model_id]));
+        Yii::$app->queue->push(new UpdateAnswerCounterJob(['id' => $this->model_id, 'field' => 'comments', 'counters' => 1]));
         return parent::beforeSave($insert);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function afterDelete()
+    {
+        Yii::$app->queue->push(new UpdateAnswerCounterJob(['id' => $this->model_id, 'field' => 'comments', 'counters' => -1]));
+        parent::afterDelete();
     }
 }

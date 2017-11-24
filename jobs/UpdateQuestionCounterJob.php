@@ -12,12 +12,25 @@ use yii\queue\RetryableJobInterface;
 use yuncms\question\models\Question;
 
 /**
- * Class UpdateCollectionJob
+ * 异步更新计数器
  * @package yuncms\question\jobs
  */
-class UpdateCollectionJob extends BaseObject implements RetryableJobInterface
+class UpdateQuestionCounterJob extends BaseObject implements RetryableJobInterface
 {
+    /**
+     * @var int
+     */
     public $id;
+
+    /**
+     * @var string 字段名
+     */
+    public $field;
+
+    /**
+     * @var integer
+     */
+    public $counters = 1;
 
     /**
      * @param Queue $queue
@@ -25,7 +38,7 @@ class UpdateCollectionJob extends BaseObject implements RetryableJobInterface
     public function execute($queue)
     {
         if (($model = Question::findOne(['id' => $this->id])) != null) {
-            $model->updateCounters(['collections' => 1]);
+            $model->updateCounters([$this->field => $this->counters]);
         }
     }
 
