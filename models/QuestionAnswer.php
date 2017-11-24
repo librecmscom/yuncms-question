@@ -154,12 +154,12 @@ class QuestionAnswer extends ActiveRecord
             Yii::$app->queue->push(new UpdateQuestionCounterJob([
                 'user_id' => $this->user_id,
                 'field' => 'answers',
-                'counters' => 1
+                'counter' => 1
             ]));
             Yii::$app->queue->push(new UpdateExtraCounterJob([
                 'user_id' => $this->user_id,
                 'field' => 'answers',
-                'counters' => 1
+                'counter' => 1
             ]));
 
             /*记录动态*/
@@ -178,12 +178,12 @@ class QuestionAnswer extends ActiveRecord
         Yii::$app->queue->push(new UpdateQuestionCounterJob([
             'user_id' => $this->user_id,
             'field' => 'answers',
-            'counters' => -1
+            'counter' => -1
         ]));
         Yii::$app->queue->push(new UpdateExtraCounterJob([
             'user_id' => $this->user_id,
             'field' => 'answers',
-            'counters' => -1
+            'counter' => -1
         ]));
         parent::afterDelete();
     }

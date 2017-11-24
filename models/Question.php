@@ -259,7 +259,7 @@ class Question extends ActiveRecord
             Yii::$app->queue->push(new UpdateExtraCounterJob([
                 'user_id' => $this->user_id,
                 'field' => 'questions',
-                'counters' => 1
+                'counter' => 1
             ]));
         }
     }
@@ -276,7 +276,7 @@ class Question extends ActiveRecord
         Yii::$app->queue->push(new UpdateExtraCounterJob([
             'user_id' => $this->user_id,
             'field' => 'questions',
-            'counters' => -1
+            'counter' => -1
         ]));
         parent::afterDelete();
     }

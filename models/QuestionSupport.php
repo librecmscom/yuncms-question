@@ -44,7 +44,7 @@ class QuestionSupport extends Support
     public function beforeSave($insert)
     {
         $this->model_class = self::TYPE;
-        Yii::$app->queue->push(new UpdateAnswerCounterJob(['id' => $this->model_id, 'field' => 'supports', 'counters' => 1]));
+        Yii::$app->queue->push(new UpdateAnswerCounterJob(['id' => $this->model_id, 'field' => 'supports', 'counter' => 1]));
         return parent::beforeSave($insert);
     }
 
@@ -53,7 +53,7 @@ class QuestionSupport extends Support
      */
     public function afterDelete()
     {
-        Yii::$app->queue->push(new UpdateAnswerCounterJob(['id' => $this->model_id, 'field' => 'supports', 'counters' => -1]));
+        Yii::$app->queue->push(new UpdateAnswerCounterJob(['id' => $this->model_id, 'field' => 'supports', 'counter' => -1]));
         parent::afterDelete();
     }
 }

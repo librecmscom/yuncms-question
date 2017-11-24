@@ -30,7 +30,7 @@ class UpdateAnswerCounterJob extends BaseObject implements RetryableJobInterface
     /**
      * @var integer
      */
-    public $counters = 1;
+    public $counter = 1;
 
     /**
      * @param Queue $queue
@@ -38,7 +38,7 @@ class UpdateAnswerCounterJob extends BaseObject implements RetryableJobInterface
     public function execute($queue)
     {
         if (($model = QuestionAnswer::findOne(['id' => $this->id])) != null) {
-            $model->updateCounters([$this->field => $this->counters]);
+            $model->updateCounters([$this->field => $this->counter]);
         }
     }
 

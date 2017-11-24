@@ -45,7 +45,7 @@ class QuestionCollection extends Collection
     public function beforeSave($insert)
     {
         $this->model_class = self::TYPE;
-        Yii::$app->queue->push(new UpdateAnswerCounterJob(['id' => $this->model_id, 'field' => 'collections', 'counters' => 1]));
+        Yii::$app->queue->push(new UpdateAnswerCounterJob(['id' => $this->model_id, 'field' => 'collections', 'counter' => 1]));
         return parent::beforeSave($insert);
     }
 
@@ -54,7 +54,7 @@ class QuestionCollection extends Collection
      */
     public function afterDelete()
     {
-        Yii::$app->queue->push(new UpdateAnswerCounterJob(['id' => $this->model_id, 'field' => 'collections', 'counters' => -1]));
+        Yii::$app->queue->push(new UpdateAnswerCounterJob(['id' => $this->model_id, 'field' => 'collections', 'counter' => -1]));
         parent::afterDelete();
     }
 }
