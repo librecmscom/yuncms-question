@@ -18,6 +18,7 @@ use yii\web\NotFoundHttpException;
 use yii\web\ForbiddenHttpException;
 use yii\web\Response;
 use yii\web\ServerErrorHttpException;
+use yuncms\question\jobs\UpdateQuestionCounterJob;
 use yuncms\question\models\Question;
 use yuncms\question\models\QuestionAnswer;
 use yuncms\question\models\QuestionAttention;
@@ -197,7 +198,7 @@ class QuestionController extends Controller
             $transaction = Question::getDb()->beginTransaction();
             try {
                 if (function_exists('credit')) {
-                    credit($model->user_id, 'answer_adopted', -$coins, $model->id, $model->title);
+                    //credit($model->user_id, 'answer_adopted', -$coins, $model->id, $model->title);
                 }
 
                 $model->updateCounters(['price' => $coins]);
@@ -231,7 +232,9 @@ class QuestionController extends Controller
         $model = $this->findModel($id);
 
         /*问题查看数+1*/
-        if (!$model->isAuthor()) $model->updateCounters(['views' => 1]);
+        if (!$model->isAuthor()) {
+            Yii::$app->queue->push(new UpdateQuestionCounterJob(['id' => $model->id, 'field' => 'views', 'counter' => 1]));
+        }
 
         /*已解决问题*/
         $bestAnswer = null;
@@ -313,7 +316,7 @@ class QuestionController extends Controller
             $model = new QuestionAttention();
             $model->load(Yii::$app->request->post(), '');
             $model->model_id = $source->id;
-            //$model->user_id = Yii::$app->user->getId();
+            $model->user_id = Yii::$app->user->getId();
             if ($model->save() === false && !$model->hasErrors()) {
                 throw new ServerErrorHttpException('Failed to update the object for unknown reason.');
             }
