@@ -5,7 +5,7 @@ window.yii.question = (function ($) {
         isActive: true,
         init: function () {
             console.info('init question.');
-            $(".article-comment-btn").click(function () {
+            $(".question-comment-btn").click(function () {
                 var model_id = $(this).data('model_id');
                 var to_user_id = $(this).data('to_user_id');
                 var content = $("#comment-" + "content-" + model_id).val();

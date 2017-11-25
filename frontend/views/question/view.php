@@ -205,14 +205,14 @@ $this->title = Html::encode($model->title);
                 <!-- 收藏部分 -->
                 <li>
                     <?php if (!Yii::$app->user->isGuest && $model->isCollected(Yii::$app->user->getId())): ?>
-                        <button type="button" data-target="collect-button" class="btn btn-default btn-sm active"
-                                data-source_type="question" data-source_id="<?= $model->id ?>" data-show_num="true"
+                        <button type="button" data-target="question-collect" class="btn btn-default btn-sm active"
+                                data-model_id="<?= $model->id ?>" data-show_num="true"
                                 data-toggle="tooltip" data-placement="right" title="" data-original-title="关注后将获得更新提醒">
                             已收藏
                         </button>
                     <?php else: ?>
-                        <button type="button" data-target="collect-button" class="btn btn-default btn-sm"
-                                data-source_type="question" data-source_id="<?= $model->id ?>" data-show_num="true"
+                        <button type="button" data-target="question-collect" class="btn btn-default btn-sm"
+                                data-model_id="<?= $model->id ?>" data-show_num="true"
                                 data-toggle="tooltip" data-placement="right" title="" data-original-title="关注后将获得更新提醒">
                             收藏
                         </button>

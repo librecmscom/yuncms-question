@@ -17,8 +17,10 @@ use yii\data\ActiveDataProvider;
 use yii\web\NotFoundHttpException;
 use yii\web\ForbiddenHttpException;
 use yii\web\Response;
+use yii\web\ServerErrorHttpException;
 use yuncms\question\models\Question;
 use yuncms\question\models\QuestionAnswer;
+use yuncms\question\models\QuestionCollection;
 use yuncms\tag\models\Tag;
 
 /**
@@ -38,10 +40,6 @@ class QuestionController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['post'],
-                    'favorite' => ['post'],
-                    'vote' => ['post'],
-                    'answer-vote' => ['post'],
-                    'answer-correct' => ['post'],
                 ],
             ],
             'access' => [
@@ -54,7 +52,11 @@ class QuestionController extends Controller
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['upload', 'create', 'append-reward', 'update', 'sn-upload', 'answer', 'answer-update', 'delete', 'favorite', 'answer-vote', 'vote', 'favorite', 'answer-correct'],
+                        'actions' => ['upload', 'create',
+                            'append-reward', 'update',
+                            'delete',
+                            'collection', 'attention'
+                        ],
                         'roles' => ['@']
                     ],
                 ],
@@ -83,13 +85,10 @@ class QuestionController extends Controller
     public function actionIndex()
     {
         $query = Question::find()->with('user');
-
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
-
         $query->applyOrder(Yii::$app->request->get('order', 'new'));
-
         return $this->render('index', ['dataProvider' => $dataProvider]);
     }
 
@@ -272,6 +271,39 @@ class QuestionController extends Controller
             return $this->redirect(['/question/question/view', 'id' => $model->id]);
         }
     }
+
+    /**
+     * 收藏问题
+     * @return array
+     * @throws ServerErrorHttpException
+     */
+    public function actionCollection()
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $source = $this->findModel(Yii::$app->request->post('model_id'));
+        if (($collect = QuestionCollection::find()->where(['model_id' => $source->id, 'user_id' => Yii::$app->user->getId()])->one()) != null) {
+            $collect->delete();
+            return ['status' => 'unCollect'];
+        } else {
+            $model = new QuestionCollection();
+            $model->subject = $source->title;
+            $model->model_id = $source->id;
+            $model->load(Yii::$app->request->post(), '');
+            if ($model->save() === false && !$model->hasErrors()) {
+                throw new ServerErrorHttpException('Failed to update the object for unknown reason.');
+            }
+            return ['status' => 'collected'];
+        }
+    }
+
+    /**
+     * 关注问题
+     */
+    public function actionAttention()
+    {
+
+    }
+
 
     /**
      * 获取模型
