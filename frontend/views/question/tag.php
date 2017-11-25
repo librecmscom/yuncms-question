@@ -8,6 +8,7 @@ use yuncms\question\frontend\assets\Asset;
 use yuncms\question\widgets\Tags;
 use yuncms\question\widgets\Popular;
 use yuncms\question\models\Question;
+use yuncms\user\models\UserExtra;
 
 /** @var \yii\data\ActiveDataProvider $dataProvider */
 Asset::register($this);
@@ -79,7 +80,7 @@ $this->title = Yii::t('question', 'Questions');
             </h2>
             <ol class="widget-top10">
                 <?php
-                $topAnswerUsers = \yuncms\user\models\Extend::top('answers', 8);
+                $topAnswerUsers = UserExtra::top('answers', 8);
                 ?>
                 <?php foreach ($topAnswerUsers as $index => $topAnswerUser): ?>
                     <li class="text-muted">
