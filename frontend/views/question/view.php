@@ -188,14 +188,14 @@ $this->title = Html::encode($model->title);
                 <!-- 关注部分 -->
                 <li>
                     <?php if (!Yii::$app->user->isGuest && $model->isFollowed(Yii::$app->user->getId())): ?>
-                        <button type="button" data-target="follow-button" class="btn btn-success btn-sm active"
-                                data-source_type="question" data-source_id="<?= $model->id ?>" data-show_num="true"
+                        <button type="button" data-target="question-follow" class="btn btn-success btn-sm active"
+                                data-model_id="<?= $model->id ?>" data-show_num="true"
                                 data-toggle="tooltip" data-placement="right" title="" data-original-title="关注后将获得更新提醒">
                             已关注
                         </button>
                     <?php else: ?>
-                        <button type="button" data-target="follow-button" class="btn btn-success btn-sm"
-                                data-source_type="question" data-source_id="<?= $model->id ?>" data-show_num="true"
+                        <button type="button" data-target="question-follow" class="btn btn-success btn-sm"
+                                data-model_id="<?= $model->id ?>" data-show_num="true"
                                 data-toggle="tooltip" data-placement="right" title="" data-original-title="关注后将获得更新提醒">
                             关注
                         </button>
