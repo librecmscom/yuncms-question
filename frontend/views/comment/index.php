@@ -1,6 +1,8 @@
 <?php
 use yii\widgets\Pjax;
 use yii\widgets\ListView;
+
+/* @var $this yii\web\View */
 ?>
 <?php Pjax::begin(); ?>
 <?= ListView::widget([

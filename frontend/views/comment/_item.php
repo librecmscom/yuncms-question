@@ -2,7 +2,7 @@
 use yii\helpers\Url;
 use yii\helpers\Html;
 use yii\helpers\HtmlPurifier;
-
+/* @var $this yii\web\View */
 /**
  * @var \yuncms\question\models\QuestionComment $model
  */
@@ -18,7 +18,7 @@ use yii\helpers\HtmlPurifier;
         <a href="<?= Url::to(['/user/space/view', 'id' => $model->user_id]) ?>"
            target="_blank"><?= $model->user->nickname ?></a>
         <?php if ($model->to_user_id): ?>
-            <span class="text-muted">回复 </span>
+            <span class="text-muted"><?=Yii::t('question','reply')?> </span>
             <a href="<?= Url::to(['/user/space/view', 'id' => $model->to_user_id]) ?>"
                target="_blank"><?= $model->toUser->nickname ?></a>
         <?php endif; ?>
@@ -30,7 +30,7 @@ use yii\helpers\HtmlPurifier;
             <a href="#" class="ml-10 comment-reply"
                data-model_id="<?= $model->model_id ?>" data-to_user_id="<?= $model->user_id ?>"
                data-model_class="<?= $model->model_class ?>"
-               data-message="回复 <?= Html::encode($model->user->nickname) ?>"><i class="fa fa-reply"></i> 回复</a>
+               data-message="<?=Yii::t('question','reply')?> <?= Html::encode($model->user->nickname) ?>"><i class="fa fa-reply"></i> <?=Yii::t('question','reply')?></a>
         <?php endif; ?>
     </div>
 

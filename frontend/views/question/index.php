@@ -7,6 +7,8 @@ use yii\widgets\ListView;
 use yuncms\question\frontend\assets\Asset;
 use yuncms\question\widgets\Tags;
 
+/* @var $this yii\web\View */
+
 /** @var \yii\data\ActiveDataProvider $dataProvider */
 Asset::register($this);
 $this->title = Yii::t('question', 'Questions');

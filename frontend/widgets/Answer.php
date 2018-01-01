@@ -4,7 +4,7 @@
  * @copyright Copyright (c) 2012 TintSoft Technology Co. Ltd.
  * @license http://www.tintsoft.com/license/
  */
-namespace yuncms\question\widgets;
+namespace yuncms\question\frontend\widgets;
 
 use Yii;
 use yii\base\Widget;

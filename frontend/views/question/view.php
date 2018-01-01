@@ -6,6 +6,7 @@ use yii\widgets\ListView;
 use yii\bootstrap\Modal;
 use yii\helpers\HtmlPurifier;
 use yii\bootstrap\ActiveForm;
+use yuncms\question\frontend\widgets\Answer;
 use yuncms\question\models\Question;
 use yuncms\question\models\QuestionAnswer;
 use yuncms\question\frontend\assets\Asset;
@@ -177,7 +178,7 @@ $this->title = Html::encode($model->title);
             <div class="widget-answer-form mt-15">
                 <?php if (!Yii::$app->user->isGuest && ($model->user_id != Yii::$app->user->id && QuestionAnswer::isAnswered(Yii::$app->user->id, $model->id))): ?>
                     <h4>我来回答</h4>
-                    <?= \yuncms\question\widgets\Answer::widget(['questionId' => $model->id]); ?>
+                    <?= Answer::widget(['questionId' => $model->id]); ?>
                 <?php endif; ?>
             </div>
         <?php endif; ?>
